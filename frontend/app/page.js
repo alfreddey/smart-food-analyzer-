@@ -1,3 +1,4 @@
+import ImageDropzone from "@/components/customs/image-dropzone";
 import { Button } from "@/components/ui/button";
 
 export default function Page() {
@@ -8,7 +9,7 @@ export default function Page() {
           Instant Food Facts - Just Take a Photo
         </h1>
         <p className="text-sm text-gray-500">See It. Snap It. Know It.</p>
-        <div className="pt-4">
+        <div className="pt-2">
           <span>Serving size: </span>
           <input
             type="number"
@@ -17,8 +18,8 @@ export default function Page() {
           />
         </div>
         <div>
-          <span>Image: </span>
-          <input type="file" name="image" />
+          <p className="mb-4">Image: </p>
+          <ImageDropzone />
         </div>
         <Button className="bg-blue-500 py-5 text-lg tracking:wider hover:bg-blue-500 hover:shadow-lg text-white cursor-pointer">
           Get nutritional facts
