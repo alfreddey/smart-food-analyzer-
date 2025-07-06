@@ -1,4 +1,5 @@
 import ImageDropzone from "@/components/customs/image-dropzone";
+import MacroDonutChart from "@/components/customs/macros";
 import { Button } from "@/components/ui/button";
 
 export default function Page() {
@@ -27,9 +28,11 @@ export default function Page() {
       </div>
 
       <section className="flex flex-col gap-4">
-        <h1>Results:</h1>
-        <article>
+        <h1 className="font-bold tracking-wide text-2xl">Results: </h1>
+        <article className="flex flex-col gap-4">
           <h1>Macros</h1>
+          <MacroDonutChart />
+          <p>Calorie intake:</p>
         </article>
         <article>
           <h1>Ingredients</h1>
