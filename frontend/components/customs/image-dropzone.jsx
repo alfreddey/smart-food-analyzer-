@@ -27,11 +27,13 @@ export default function ImageDropzone() {
         }
     });
 
+    const isImgUploaded = !(Object.keys(file).length) ? true : false;
+
     return (
         <div {...getRootProps()} className="duration-150 ease-in text-[#999] flex flex-col gap-4 text-sm items-center border-2 border-dashed border-[#eeeeee] bg-[#fafafa] rounded-xl p-8 text-center hover:border-blue-500 transition cursor-pointer shadow-sm">
             <input {...getInputProps()} />
             {
-                isEmpty(file) ? 
+                isImgUploaded ? 
                 <>
                     <Upload size={48} />
                     <p>Drag a single food image here, or click to browse</p>
@@ -47,8 +49,4 @@ export default function ImageDropzone() {
             }
         </div>
     )
-}
-
-function isEmpty(obj) {
-    return !Object.keys(obj).length ? true : false
 }
