@@ -4,6 +4,7 @@ const router = express.Router();
 router.get("/ingredients", async function (req, res) {
   const apiKey = process.env.SPOONACULAR_API_KEY;
   try {
+    // TODO: Get query from query params. Add error handling.
     const searchParams = "query=pizza&number=1";
     const url =
       "https://api.spoonacular.com/recipes/complexSearch?" + searchParams;
