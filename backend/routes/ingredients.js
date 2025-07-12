@@ -2,23 +2,44 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/ingredients", async function (req, res) {
-  const url =
-    "https://trackapi.nutritionix.com/v2/search/item/?upc=49000000450";
-  const body = { query: "Coca-Cola Classic" };
-
+  const apiKey = process.env.SPOONACULAR_API_KEY;
   try {
-    const response = await fetch(url, {
+    const searchParams = "query=pizza&number=1";
+    const url =
+      "https://api.spoonacular.com/recipes/complexSearch?" + searchParams;
+    const foodRes = await fetch(url, {
       headers: {
-        "x-app-id": process.env.NUTRITIONIX_APP_ID,
-        "x-app-key": process.env.NUTRITIONIX_APP_KEY,
-        "Content-Type": "application/x-www-form-urlencoded",
+        "x-api-key": apiKey,
       },
     });
 
-    res.send(await response.json());
+    if (!foodRes.ok) {
+      throw new Error("Internal Server Error. Couldn't get food id.");
+    }
+
+    const foodData = await foodRes.json();
+    const foodId = foodData.results[0].id;
+
+    const recipeUrl = `https://api.spoonacular.com/recipes/${foodId}/ingredientWidget.json`;
+    const recipeRes = await fetch(recipeUrl, {
+      headers: {
+        "x-api-key": apiKey,
+      },
+    });
+
+    if (!recipeRes.ok) {
+      throw new Error("Internal Server Error. Couldn't get the ingredients.");
+    }
+
+    const recipeData = await recipeRes.json();
+    const ingredients = recipeData["ingredients"].map((elem) => elem.name);
+
+    res.status(200).json({ id: foodId, ingredients });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ err: "Failed to fetch ingredients" });
+    console.error(err.message);
+    res.status(500).json({
+      error: err.message,
+    });
   }
 });
 
