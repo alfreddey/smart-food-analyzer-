@@ -4,10 +4,10 @@ const router = express.Router();
 router.get("/ingredients", async function (req, res) {
   const apiKey = process.env.SPOONACULAR_API_KEY;
   try {
-    // TODO: Get query from query params. Add error handling.
+    // TODO: Get query from query params. Add error handling for an empty query string.
     const searchParams = "query=pizza&number=1";
     const url =
-      "https://api.spoonacular.com/recipes/complexSearch?" + searchParams;
+      "https://api.spoonacular.com/recipes/complexSearch" + "?" + searchParams;
     const foodRes = await fetch(url, {
       headers: {
         "x-api-key": apiKey,
@@ -32,8 +32,8 @@ router.get("/ingredients", async function (req, res) {
       throw new Error("Internal Server Error. Couldn't get the ingredients.");
     }
 
-    const recipeData = await recipeRes.json();
-    const ingredients = recipeData["ingredients"].map((elem) => elem.name);
+    const recipe = await recipeRes.json();
+    const ingredients = recipe["ingredients"].map((elem) => elem.name);
 
     res.status(200).json({ id: foodId, ingredients });
   } catch (err) {
