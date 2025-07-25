@@ -6,65 +6,81 @@ import * as tf from "@tensorflow/tfjs";
 import { useEffect, useRef } from "react";
 
 export default function Page() {
+  const modelRef = useRef({});
   const imageRef = useRef(null);
 
   useEffect(() => {
-    const run = async () => {
-      // Load model
-      const model = await tf.loadGraphModel("/model/model.json");
-      console.log("Model loaded");
+    const loadModel = async function () {
+      const modelUrl = "/model/model.json";
+      const model = await tf.loadGraphModel(modelUrl);
 
-      const imageElement = imageRef.current;
-      if (!imageElement.complete) {
-        await new Promise((resolve) => {
-          imageElement.onload = resolve;
-        });
-      }
-
-      const imgTensor = tf.browser
-        .fromPixels(imageElement)
-        .resizeBilinear([224, 224])
-        .toFloat()
-        .div(127.5)
-        .sub(1)
-        .expandDims();
-
-      // Make prediction
-      const predictions = model.predict(imgTensor);
-      // predictions.print();
-      // const highestIndex = predictions.argMax(-1).arraySync()[0]; // Get top class
-      // console.log(imgTensor);
-      const labels = await loadLabels();
-      // console.log(labels[highestIndex]);
-
-      let topPred = await predictions.data();
-      topPred = [...topPred]
-        .map((predictions, i) => ({ i, predictions }))
-        .sort((a, b) => b.predictions - a.predictions)
-        .slice(0, 3);
-      console.log(topPred);
-
-      topPred.forEach(({ i, predictions }) => {
-        console.log(
-          `Label: ${labels[i]}, Confidence score ${(predictions * 100).toFixed(
-            2
-          )}%`
-        );
-      });
+      modelRef.current.model = model;
     };
-
-    run();
 
     const loadLabels = async function () {
-      const res = await fetch("/model/meta/labels.txt");
-      const text = await res.text();
-      const labels = text
+      const path = "/model/meta/labels.txt";
+      const res = await fetch(path);
+      const content = await res.text();
+      const labels = content
         .split("\n")
-        .map((line) => line.trim())
+        .map((str) => str.trim())
         .filter(Boolean);
-      return labels;
+
+      modelRef.current.labels = labels;
     };
+
+    loadModel();
+    loadLabels();
+    //   const loadModel = async () => {
+    //     // Load model
+    //     const model = await tf.loadGraphModel("/model/model.json");
+    //     console.log("Model loaded");
+    //     const imageElement = imageRef.current;
+    //     if (!imageElement.complete) {
+    //       await new Promise((resolve) => {
+    //         imageElement.onload = resolve;
+    //       });
+    //     }
+    //     const imgTensor = tf.browser
+    //       .fromPixels(imageElement)
+    //       .resizeBilinear([224, 224])
+    //       .toFloat()
+    //       .div(127.5)
+    //       .sub(1)
+    //       .expandDims();
+    //     // Make prediction
+    //     const predictions = model.predict(imgTensor);
+    //     // predictions.print();
+    //     // const highestIndex = predictions.argMax(-1).arraySync()[0]; // Get top class
+    //     // console.log(imgTensor);
+    //     const labels = await loadLabels();
+    //     // console.log(labels[highestIndex]);
+    //     let topPred = await predictions.data();
+    //     topPred = [...topPred]
+    //       .map((predictions, i) => ({ i, predictions }))
+    //       .sort((a, b) => b.predictions - a.predictions)
+    //       .slice(0, 3);
+    //     console.log(topPred);
+    //     topPred.forEach(({ i, predictions }) => {
+    //       console.log(
+    //         `Label: ${labels[i]}, Confidence score ${(predictions * 100).toFixed(
+    //           2
+    //         )}%`
+    //       );
+    //     });
+    //   };
+    //   loadModel();
+    //   const loadLabels = async function () {
+    //     const res = await fetch("/model/meta/labels.txt");
+    //     const text = await res.text();
+    //     const labels = text
+    //       .split("\n")
+    //       .map((line) => line.trim())
+    //       .filter(Boolean);
+    //     return labels;
+    //   };
   }, []);
+
   return (
     <div className="bg-[url(/bg-img.png)] bg-[#f4fcfc];">
       <main className="mx-auto border border-t-0 bg-white px-10 shadow-2xl py-4 w-fit flex flex-col gap-12 min-h-screen">
@@ -95,7 +111,7 @@ export default function Page() {
           </div>
           <div>
             <p className="mb-4">Image: </p>
-            <ImageDropzone />
+            <ImageDropzone model={modelRef} />
           </div>
           <Button className="bg-blue-500 py-5 text-lg tracking:wider hover:bg-blue-500 hover:shadow-lg text-white cursor-pointer">
             Get nutritional facts
