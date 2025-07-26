@@ -1,52 +1,12 @@
-"use client";
 import ImageDropzone from "@/components/customs/image-dropzone";
 import MacroDonutChart from "@/components/customs/macros";
 import { Button } from "@/components/ui/button";
-import * as tf from "@tensorflow/tfjs";
-import { useEffect, useRef } from "react";
 
 export default function Page() {
-  const modelRef = useRef({});
-  const imageRef = useRef(null);
-
-  useEffect(() => {
-    const loadModel = async function () {
-      const modelUrl = "/model/model.json";
-      const model = await tf.loadGraphModel(modelUrl);
-
-      modelRef.current.model = model;
-    };
-
-    const loadLabels = async function () {
-      const path = "/model/meta/labels.txt";
-      const res = await fetch(path);
-      const content = await res.text();
-      const labels = content
-        .split("\n")
-        .map((str) => str.trim())
-        .filter(Boolean);
-
-      modelRef.current.labels = labels;
-    };
-
-    loadModel();
-    loadLabels();
-  }, []);
-
   return (
     <div className="bg-[url(/bg-img.png)] bg-[#f4fcfc];">
       <main className="mx-auto border border-t-0 bg-white px-10 shadow-2xl py-4 w-fit flex flex-col gap-12 min-h-screen">
         <div className="flex flex-col gap-4">
-          <div>
-            {/* <img
-              ref={imageRef}
-              src="/beet-salad.jpg"
-              alt="Test Image"
-              crossOrigin="anonymous"
-              style={{ display: "block" }}
-            /> */}
-          </div>
-
           <h1 className="text-2xl/12 font-bold tracking-wide">
             Instant Food Facts - Just Take a Photo
           </h1>
@@ -61,7 +21,7 @@ export default function Page() {
           </div>
           <div>
             <p className="mb-4">Image: </p>
-            <ImageDropzone modelRef={modelRef} />
+            <ImageDropzone />
           </div>
           <Button className="bg-blue-500 py-5 text-lg tracking:wider hover:bg-blue-500 hover:shadow-lg text-white cursor-pointer">
             Get nutritional facts

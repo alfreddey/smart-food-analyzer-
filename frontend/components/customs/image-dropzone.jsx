@@ -1,24 +1,24 @@
 "use client";
 import { Upload, Ban } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import * as tf from "@tensorflow/tfjs";
-import { flushSync } from "react-dom";
 import { img } from "@/lib/lib";
 
-export default function ImageDropzone({ modelRef }) {
+export default function ImageDropzone() {
+  const modelRef = useRef({});
   const [image, setImage] = useState({});
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/jpeg": [],
       "image/png": [],
     },
-    maximages: 1,
+    multiple: false,
+    maxFiles: 1,
     onDrop: async function (acceptedFiles) {
-      // TODO: validate image format 
-      if (!acceptedFiles.length) {
+      if (!acceptedFiles.length || !acceptedFiles[0].type.startsWith('image/')) {
         setImage({
-          message: "Please select a single food image.",
+          message: "Please select a food image(JPEG, PNG).",
         });
       } else {
         const image = acceptedFiles[0];
@@ -27,8 +27,6 @@ export default function ImageDropzone({ modelRef }) {
           message: image.name,
         });
 
-        flushSync(setImage(newImage));
-
         // Used new Image() instead of imgRef
         // because it returned a high-res photo
         // and increased the model's accuracy.
@@ -36,13 +34,13 @@ export default function ImageDropzone({ modelRef }) {
         // const imgElement = imgRef.current;
         // await imgElement.decode();
 
-        const md = modelRef.current.model;
+        const IMG_SHAPE = [224, 224];
+        const md = modelRef.current.model;  
+        const labels = modelRef.current.labels;
+
         const imgElement = new Image();
         imgElement.src = image.preview;
-        await imgElement.decode(); // Very essential, the model's performance relies on this
-
-        const IMG_SHAPE = [224, 224];
-        const labels = modelRef.current.labels;
+        await imgElement.decode(); // Very essential, affects model's performance
 
         const processedImg = img.prepare(imgElement, IMG_SHAPE);
         const pred = img.classify(md, processedImg);
@@ -55,11 +53,40 @@ export default function ImageDropzone({ modelRef }) {
             ).toFixed(2)}%`
           )
         );
+
+        console.log('onDrop')
+
+        setImage(newImage)
       }
     },
   });
 
-  const isImageUploaded = !!Object.keys(image).length;
+  let isImageUploaded = !!Object.keys(image).length;
+
+  useEffect(() => {
+    const loadModel = async function () {
+      const modelUrl = "/model/model.json";
+      const model = await tf.loadGraphModel(modelUrl);
+
+      modelRef.current.model = model;
+    };
+
+    const loadLabels = async function () {
+      const path = "/model/meta/labels.txt";
+      const res = await fetch(path);
+      const content = await res.text();
+      const labels = content
+        .split("\n")
+        .map((str) => str.trim())
+        .filter(Boolean);
+
+      modelRef.current.labels = labels;
+    };
+
+    loadModel();
+    loadLabels();
+    console.log('effect')
+  }, []);
 
   return (
     <div
@@ -76,7 +103,7 @@ export default function ImageDropzone({ modelRef }) {
               src={image.preview}
               width={224}
               height={224}
-              // onLoad={() => URL.revokeObjectURL(image.preview)}
+              onLoad={() => URL.revokeObjectURL(image.preview)}
             />
           )}
           <p className="truncate w-2xs">{image.message}</p>
