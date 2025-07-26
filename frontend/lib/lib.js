@@ -6,9 +6,9 @@ const img = {
 
     return predictions;
   },
-  topKPred: function (predictions, len) {
-    const pred = predictions.arraySync();
-    const topK = pred[0]
+  topKPred: async function (predictions, len) {
+    const pred = await predictions.data();
+    const topK = [...pred]
       .map((val, i) => ({ i, prediction: val }))
       .sort((a, b) => b.prediction - a.prediction)
       .slice(0, len);
@@ -19,8 +19,7 @@ const img = {
     const imgTensor = tf.browser
       .fromPixels(imgElem)
       .resizeBilinear(IMG_SHAPE)
-      .div(127.5)
-      .sub(1)
+      .toFloat()
       .expandDims();
 
     return imgTensor;

@@ -6,9 +6,8 @@ import * as tf from "@tensorflow/tfjs";
 import { flushSync } from "react-dom";
 import { img } from "@/lib/lib";
 
-export default function ImageDropzone({ model }) {
+export default function ImageDropzone({ modelRef }) {
   const [image, setImage] = useState({});
-  const imgRef = useRef(null);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/jpeg": [],
@@ -29,13 +28,26 @@ export default function ImageDropzone({ model }) {
 
         flushSync(setImage(newImage));
 
-        const IMG_SHAPE = [224, 224];
-        
-        const processedImg = img.prepare(imgRef.current, IMG_SHAPE);
-        const result = img.classify(model.current.model, processedImg);
-        const k = img.topKPred(result, 3)
+        // Used new Image() instead of imgRef
+        // because this returned a high-res photo
+        // and increased the model's accuracy.
+        // you can test by using this code:
+        // const imgElement = imgRef.current;
+        // await imgElement.decode();
 
-        console.log(processedImg, result, k)
+        const md = modelRef.current.model;
+        const imgElement = new Image();
+        imgElement.src = image.preview;
+        await imgElement.decode();  // Very essential, the model's performance relies on this
+
+        const IMG_SHAPE = [224, 224];
+        const labels = modelRef.current.labels;
+
+        const processedImg = img.prepare(imgElement, IMG_SHAPE);
+        const pred = img.classify(md, processedImg);
+        const topK = await img.topKPred(pred, 3);
+
+        topK.forEach(({ i, prediction }) => console.log(`Label: ${labels[i]}, Confidence score: ${(prediction*100).toFixed(2)}%`));
       }
     },
   });
@@ -48,6 +60,7 @@ export default function ImageDropzone({ model }) {
       className="duration-150 ease-in text-[#999] flex flex-col gap-4 text-sm items-center border-2 border-dashed border-[#eeeeee] bg-[#fafafa] rounded-xl p-8 text-center hover:border-blue-500 transition cursor-pointer shadow-sm"
     >
       <input {...getInputProps()} />
+      {/* <img ref={imgRef} src="apple_pie.jpg" /> */}
       {isImageUploaded ? (
         <>
           <Upload size={48} />
@@ -59,10 +72,9 @@ export default function ImageDropzone({ model }) {
             <Ban size={48} />
           ) : (
             <img
-              ref={imgRef}
               src={image.preview}
-              width={48}
-              height={48}
+              width={224}
+              height={224}
               onLoad={() => URL.revokeObjectURL(image.preview)}
             />
           )}

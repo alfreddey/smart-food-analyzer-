@@ -1,0 +1,49 @@
+// const run = async () => {
+    //   const loadLabels = async function () {
+    //     const res = await fetch("/model/meta/labels.txt");
+    //     const text = await res.text();
+    //     const labels = text
+    //       .split("\n")
+    //       .map((line) => line.trim())
+    //       .filter(Boolean);
+    //     return labels;
+    //   };
+    //   // Load model
+    //   const model = await tf.loadGraphModel("/model/model.json");
+    //   console.log("Model loaded");
+    //   const imageElement = imageRef.current;
+    //   modelRef.current.img = imageElement;
+    //   // if (!imageElement.complete) {
+    //   //   await new Promise((resolve) => {
+    //   //     imageElement.onload = resolve;
+    //   //   });
+    //   // }
+    //   const imgTensor = tf.browser
+    //     .fromPixels(imageElement)
+    //     .resizeBilinear([224, 224])
+    //     .toFloat()
+    //     .expandDims();
+
+    //   console.log(imgTensor);
+    //   // Make prediction
+    //   const predictions = model.predict(imgTensor);
+    //   // predictions.print();
+    //   // const highestIndex = predictions.argMax(-1).arraySync()[0]; // Get top class
+    //   // console.log(imgTensor);
+    //   const labels = await loadLabels();
+    //   // console.log(labels[highestIndex]);
+    //   let topPred = await predictions.data();
+    //   topPred = [...topPred]
+    //     .map((predictions, i) => ({ i, predictions }))
+    //     .sort((a, b) => b.predictions - a.predictions)
+    //     .slice(0, 3);
+    //   console.log(topPred);
+    //   topPred.forEach(({ i, predictions }) => {
+    //     console.log(
+    //       `Label: ${labels[i]}, Confidence score ${(predictions * 100).toFixed(
+    //         2
+    //       )}%`
+    //     );
+    //   });
+    // };
+    // run();
