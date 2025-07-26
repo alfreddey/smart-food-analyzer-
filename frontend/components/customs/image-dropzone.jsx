@@ -8,6 +8,7 @@ import { img } from "@/lib/lib";
 export default function ImageDropzone() {
   const modelRef = useRef({});
   const [image, setImage] = useState({});
+  const [pred, setPred] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/jpeg": [],
@@ -16,7 +17,10 @@ export default function ImageDropzone() {
     multiple: false,
     maxFiles: 1,
     onDrop: async function (acceptedFiles) {
-      if (!acceptedFiles.length || !acceptedFiles[0].type.startsWith('image/')) {
+      if (
+        !acceptedFiles.length ||
+        !acceptedFiles[0].type.startsWith("image/")
+      ) {
         setImage({
           message: "Please select a food image(JPEG, PNG).",
         });
@@ -35,7 +39,7 @@ export default function ImageDropzone() {
         // await imgElement.decode();
 
         const IMG_SHAPE = [224, 224];
-        const md = modelRef.current.model;  
+        const md = modelRef.current.model;
         const labels = modelRef.current.labels;
 
         const imgElement = new Image();
@@ -46,17 +50,8 @@ export default function ImageDropzone() {
         const pred = img.classify(md, processedImg);
         const topK = await img.topKPred(pred, 3);
 
-        topK.forEach(({ i, prediction }) =>
-          console.log(
-            `Label: ${labels[i]}, Confidence score: ${(
-              prediction * 100
-            ).toFixed(2)}%`
-          )
-        );
-
-        console.log('onDrop')
-
-        setImage(newImage)
+        setPred(topK);
+        setImage(newImage);
       }
     },
   });
@@ -85,7 +80,6 @@ export default function ImageDropzone() {
 
     loadModel();
     loadLabels();
-    console.log('effect')
   }, []);
 
   return (
@@ -107,6 +101,28 @@ export default function ImageDropzone() {
             />
           )}
           <p className="truncate w-2xs">{image.message}</p>
+          <fieldset onClick={(e) => e.stopPropagation()} className="text-md p-4 border rounded-2xl flex gap-2 flex-col bg-slate-100">
+            <legend className="">Select from the list of predictions:</legend>
+            {pred.map(({ prediction, i }) => {
+              const labels = modelRef.current.labels;
+              return (
+                <div key={i} className="flex gap-2">
+                  <input
+                  className="w-8"
+                    type="radio"
+                    id={i}
+                    name="prediction"
+                    value={labels[i]}
+                  />
+                  <label htmlFor={labels[i]}>{`${
+                    labels[i]
+                  }, ${(prediction * 100).toFixed(
+                    2
+                  )}% confidence score`}</label>
+                </div>
+              );
+            })}
+          </fieldset>
         </>
       ) : (
         <>
