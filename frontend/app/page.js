@@ -27,7 +27,6 @@ export default function Page() {
         .filter(Boolean);
 
       modelRef.current.labels = labels;
-      console.log(modelRef);
     };
 
     loadModel();
