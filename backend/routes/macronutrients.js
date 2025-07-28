@@ -4,9 +4,11 @@ const router = express.Router();
 router.get("/macros", async function (req, res) {
   const apiKey = process.env.SPOONACULAR_API_KEY;
   try {
-    const searchParams = "title=pizza";
+    const fClassParam = req.query.fClass || "pizza";
     const url =
-      "https://api.spoonacular.com/recipes/guessNutrition" + "?" + searchParams;
+      "https://api.spoonacular.com/recipes/guessNutrition" +
+      "?" +
+      `title=${fClassParam}`;
     const macrosRes = await fetch(url, {
       headers: {
         "x-api-key": apiKey,
