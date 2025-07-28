@@ -2,6 +2,7 @@
 import { Upload, Ban } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
+import { usePathname, useSearchParams } from "next/navigation";
 import * as tf from "@tensorflow/tfjs";
 import { img } from "@/lib/lib";
 
@@ -9,6 +10,8 @@ export default function ImageDropzone() {
   const modelRef = useRef({});
   const [image, setImage] = useState({});
   const [pred, setPred] = useState([]);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/jpeg": [],
@@ -40,7 +43,6 @@ export default function ImageDropzone() {
 
         const IMG_SHAPE = [224, 224];
         const md = modelRef.current.model;
-        const labels = modelRef.current.labels;
 
         const imgElement = new Image();
         imgElement.src = image.preview;
@@ -50,6 +52,10 @@ export default function ImageDropzone() {
         const pred = img.classify(md, processedImg);
         const topK = await img.topKPred(pred, 3);
 
+        const param = new URLSearchParams(searchParams);
+        param.delete("fClass");
+        window.history.replaceState({}, "", `${pathname}?${param.toString()}`);
+
         setPred(topK);
         setImage(newImage);
       }
@@ -57,6 +63,13 @@ export default function ImageDropzone() {
   });
 
   let isImageUploaded = !!Object.keys(image).length;
+
+  const handleRadioChange = function (e) {
+    const value = e.target.value;
+    const param = new URLSearchParams(searchParams);
+    param.set("fClass", value);
+    window.history.replaceState({}, "", `${pathname}?${param.toString()}`);
+  };
 
   useEffect(() => {
     const loadModel = async function () {
@@ -78,6 +91,8 @@ export default function ImageDropzone() {
       modelRef.current.labels = labels;
     };
 
+
+    window.history.replaceState({}, "", `${pathname}`);
     loadModel();
     loadLabels();
   }, []);
@@ -93,36 +108,42 @@ export default function ImageDropzone() {
           {!image.preview ? (
             <Ban size={48} />
           ) : (
-            <img
-              src={image.preview}
-              width={224}
-              height={224}
-              onLoad={() => URL.revokeObjectURL(image.preview)}
-            />
+            <>
+              <img
+                src={image.preview}
+                width={224}
+                height={224}
+                onLoad={() => URL.revokeObjectURL(image.preview)}
+              />
+              <fieldset
+                onClick={(e) => e.stopPropagation()}
+                className="text-md p-4 border rounded-2xl flex gap-2 flex-col bg-slate-100"
+              >
+                <legend className="">
+                  Select from the list of predictions:
+                </legend>
+                {pred.map(({ prediction, i }) => {
+                  const labels = modelRef.current.labels;
+                  return (
+                    <div key={i} className="flex gap-2">
+                      <input
+                        className="w-8"
+                        type="radio"
+                        id={i}
+                        name="prediction"
+                        value={labels[i]}
+                        onChange={handleRadioChange}
+                      />
+                      <label htmlFor={labels[i]}>{`${labels[i]}, ${(
+                        prediction * 100
+                      ).toFixed(2)}% confidence score`}</label>
+                    </div>
+                  );
+                })}
+              </fieldset>
+            </>
           )}
           <p className="truncate w-2xs">{image.message}</p>
-          <fieldset onClick={(e) => e.stopPropagation()} className="text-md p-4 border rounded-2xl flex gap-2 flex-col bg-slate-100">
-            <legend className="">Select from the list of predictions:</legend>
-            {pred.map(({ prediction, i }) => {
-              const labels = modelRef.current.labels;
-              return (
-                <div key={i} className="flex gap-2">
-                  <input
-                  className="w-8"
-                    type="radio"
-                    id={i}
-                    name="prediction"
-                    value={labels[i]}
-                  />
-                  <label htmlFor={labels[i]}>{`${
-                    labels[i]
-                  }, ${(prediction * 100).toFixed(
-                    2
-                  )}% confidence score`}</label>
-                </div>
-              );
-            })}
-          </fieldset>
         </>
       ) : (
         <>
