@@ -4,7 +4,7 @@ const router = express.Router();
 router.get("/macros", async function (req, res) {
   const apiKey = process.env.SPOONACULAR_API_KEY;
   try {
-    const fClassParam = req.query.fClass || "pizza";
+    const fClassParam = req.query?.fClass;
     const url =
       "https://api.spoonacular.com/recipes/guessNutrition" +
       "?" +
@@ -22,10 +22,15 @@ router.get("/macros", async function (req, res) {
     }
 
     const macros = await macrosRes.json();
-    res.json({ macros });
+
+    if (macros.status == "error") {
+      throw new Error(macros);
+    }
+
+    res.json({ foodName: req.query.fClass, macros });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ status: err.status, error: err.message });
   }
 });
 

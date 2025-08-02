@@ -5,9 +5,11 @@ router.get("/ingredients", async function (req, res) {
   const apiKey = process.env.SPOONACULAR_API_KEY;
   try {
     // TODO: Get query from query params. Add error handling for an empty query string.
-    const searchParams = "query=pizza&number=1";
+    const fClassParam = req.query?.fClass || "pizza";
     const url =
-      "https://api.spoonacular.com/recipes/complexSearch" + "?" + searchParams;
+      "https://api.spoonacular.com/recipes/complexSearch" +
+      "?" +
+      `query=${fClassParam}&number=1`;
     const foodRes = await fetch(url, {
       headers: {
         "x-api-key": apiKey,
