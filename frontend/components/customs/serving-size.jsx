@@ -22,6 +22,7 @@ export default function ServingSizeInput() {
       <span>Serving size: </span>
       <input
         type="number"
+        defaultValue={1}
         onChange={handleNumberChange}
         min="1"
         max="5"

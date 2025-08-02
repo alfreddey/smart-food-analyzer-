@@ -91,7 +91,6 @@ export default function ImageDropzone() {
       modelRef.current.labels = labels;
     };
 
-
     window.history.replaceState({}, "", `${pathname}`);
     loadModel();
     loadLabels();
@@ -106,7 +105,10 @@ export default function ImageDropzone() {
       {isImageUploaded ? (
         <>
           {!image.preview ? (
-            <Ban size={48} />
+            <>
+              <Ban size={48} />
+              <p className="truncate w-2xs">{image.message}</p>
+            </>
           ) : (
             <>
               <img
@@ -143,7 +145,6 @@ export default function ImageDropzone() {
               </fieldset>
             </>
           )}
-          <p className="truncate w-2xs">{image.message}</p>
         </>
       ) : (
         <>
