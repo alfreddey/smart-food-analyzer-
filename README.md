@@ -5,17 +5,17 @@ Smart Food Analyzer is a web-based application that uses **Convolutional Neural 
 
 ---
 
-## 🚀 Features
-- 📸 **Food Image Recognition** – Upload a single food image and get instant classification.  
-- 🔍 **Nutrient & Calorie Estimation** – Fetch calorie, protein, fat, and carbohydrate values.  
-- 🥗 **Ingredient Lookup** – Retrieve a list of common ingredients for the detected meal.  
-- 📊 **Interactive Visuals** – Donut charts for macronutrient distribution.  
-- 🌐 **Web-based Interface** – Responsive **React** frontend with **TailwindCSS**.  
-- ⚡ **Fast & Scalable** – **ExpressJS API** backed by **TensorFlow/Keras** models.  
+## Features
+- **Food Image Recognition** – Upload a single food image and get instant classification.  
+- **Nutrient & Calorie Estimation** – Fetch calorie, protein, fat, and carbohydrate values.  
+- **Ingredient Lookup** – Retrieve a list of common ingredients for the detected meal.  
+- **Interactive Visuals** – Donut charts for macronutrient distribution.  
+- **Web-based Interface** – Responsive **React** frontend with **TailwindCSS**.  
+- **Fast & Scalable** – **ExpressJS API** backed by **TensorFlow/Keras** models.  
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 - **Frontend**: React + TailwindCSS  
 - **Backend**: Node.js + ExpressJS REST API  
 - **Model Training**: TensorFlow/Keras (Python, trained on Food-101 dataset)  
@@ -26,11 +26,11 @@ Smart Food Analyzer is a web-based application that uses **Convolutional Neural 
 
 ## 📂 Project Structure
 smart-food-analyzer/
-│── frontend/ # React + TailwindCSS UI
-│── backend/ # ExpressJS REST API
-│── model/ # TensorFlow/Keras model training scripts
-│── tests/ # Unit, system, and API tests (Jest, Postman)
-│── docs/ # Project report & documentation
+- │── frontend/ React + TailwindCSS UI
+- │── backend/ ExpressJS REST API
+- │── model/ TensorFlow/Keras model training scripts
+- │── tests/ Unit, system, and API tests (Jest, Postman)
+- │── docs/ Project report & documentation
 
 
 ---
@@ -64,8 +64,10 @@ cd ../frontend
 pnpm install
 pnpm dev
 
+```
 
-🖼️ Usage
+
+Usage
 
 Open the web app in your browser.
 
@@ -78,7 +80,7 @@ Click “Get Nutritional Facts”.
 View calories, macronutrients (donut chart), and ingredients instantly.
 
 
-🧪 Testing
+ Testing
 
 Unit Tests – JestJS for React components.
 
@@ -89,7 +91,10 @@ API Tests – Postman for endpoint validation.
 Responsiveness – Tested across devices.
 
 Run tests:
+```bash
 pnpm test
+```
+
 
 
 📊 Model Training
@@ -114,12 +119,14 @@ Visual macronutrient breakdown for improved usability.
 
 Open, modular design for easy future extensions.
 
+
+
 Future Work
 
-🔗 Multi-label classification for mixed meals.
+Multi-label classification for mixed meals.
 
-🌍 Expand dataset to include culturally diverse foods.
+Expand dataset to include culturally diverse foods.
 
-🧠 Explore transfer learning with larger models (EfficientNet, ResNet).
+Explore transfer learning with larger models (EfficientNet, ResNet).
 
-📱 Mobile app integration for wider accessibility.
+Mobile app integration for wider accessibility.
