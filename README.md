@@ -5,6 +5,7 @@ Smart Food Analyzer is a web-based application that uses **Convolutional Neural 
 
 ---
 <img src="./assets/Smart Food Analyzer - 1.png" />
+<img src="./assets/Smart Food Analyzer - 2.png" />
 
 ---
 ## Features
