@@ -1,4 +1,3 @@
-# smart-food-analyzer-
 # 🍽️ Smart Food Analyzer
 **Deep Learning-Based Food Recognition and Dietary Assessment System**
 
@@ -32,3 +31,36 @@ smart-food-analyzer/
 │── model/ # TensorFlow/Keras model training scripts
 │── tests/ # Unit, system, and API tests (Jest, Postman)
 │── docs/ # Project report & documentation
+
+
+---
+
+## ⚙️ Installation
+
+### Prerequisites
+- Node.js (>= 18)  
+- Python (>= 3.9)  
+- npm or pnpm  
+- API Key from [Spoonacular](https://spoonacular.com/food-api)
+
+### Setup
+```bash
+# Clone repository
+git clone https://github.com/your-username/smart-food-analyzer.git
+cd smart-food-analyzer
+
+# Install dependencies
+pnpm install    # or npm install
+
+# Backend setup
+cd backend
+cp .env.example .env   # add your API keys here
+
+# Run backend
+pnpm start
+
+# Frontend setup
+cd ../frontend
+pnpm install
+pnpm dev
+
