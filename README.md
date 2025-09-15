@@ -16,21 +16,20 @@ Smart Food Analyzer is a web-based application that uses **Convolutional Neural 
 ---
 
 ## System Architecture
-- **Frontend**: React + TailwindCSS  
+- **Frontend**: NextJS + TailwindCSS  
 - **Backend**: Node.js + ExpressJS REST API  
 - **Model Training**: TensorFlow/Keras (Python, trained on Food-101 dataset)  
 - **Database Integration**: Nutritionix/Spoonacular API for calorie & macronutrient data  
-- **Deployment**: Runs in browser via TensorFlow.js  
+- **Deployment**: Runs in browser 
 
 ---
 
 ## 📂 Project Structure
 smart-food-analyzer/
-- │── frontend/ React + TailwindCSS UI
 - │── backend/ ExpressJS REST API
-- │── model/ TensorFlow/Keras model training scripts
-- │── tests/ Unit, system, and API tests (Jest, Postman)
-- │── docs/ Project report & documentation
+- │── frontend/ NextJS + TailwindCSS UI
+- │── model/ TensorFlow model.json + labels.txt file
+- │── tests/ Unit, and system tests (Jest, Postman)
 
 
 ---
