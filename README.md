@@ -64,3 +64,62 @@ cd ../frontend
 pnpm install
 pnpm dev
 
+
+🖼️ Usage
+
+Open the web app in your browser.
+
+Upload a JPEG/PNG food image.
+
+Select the predicted food class (editable).
+
+Click “Get Nutritional Facts”.
+
+View calories, macronutrients (donut chart), and ingredients instantly.
+
+
+🧪 Testing
+
+Unit Tests – JestJS for React components.
+
+System Tests – Integration of UI and API.
+
+API Tests – Postman for endpoint validation.
+
+Responsiveness – Tested across devices.
+
+Run tests:
+pnpm test
+
+
+📊 Model Training
+
+Dataset: Food-101
+
+Preprocessing: Resize (224x224), normalization, augmentation
+
+Architecture: CNN with transfer learning (MobileNet, Xception)
+
+Optimizer: Adam (lr=1e-5 tuned for stability)
+
+Target Performance: Accuracy ≥ 80%, Loss ≤ 0.6
+
+Novel Contributions
+
+Domain-specific CNN optimized for food recognition.
+
+Seamless integration of deep learning with real-time web app.
+
+Visual macronutrient breakdown for improved usability.
+
+Open, modular design for easy future extensions.
+
+Future Work
+
+🔗 Multi-label classification for mixed meals.
+
+🌍 Expand dataset to include culturally diverse foods.
+
+🧠 Explore transfer learning with larger models (EfficientNet, ResNet).
+
+📱 Mobile app integration for wider accessibility.
