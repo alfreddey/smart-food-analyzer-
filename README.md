@@ -4,7 +4,8 @@
 Smart Food Analyzer is a web-based application that uses **Convolutional Neural Networks (CNNs)** to recognize food from images, estimate calories and macronutrients, and list common ingredients. It empowers individuals, nutritionists, and fitness coaches with instant, reliable dietary insights.
 
 ---
-
+![Demo image](./assets/Smart Food Analyzer - 1.png)
+---
 ## Features
 - **Food Image Recognition** – Upload a single food image and get instant classification.  
 - **Nutrient & Calorie Estimation** – Fetch calorie, protein, fat, and carbohydrate values.  
