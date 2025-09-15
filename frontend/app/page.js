@@ -11,34 +11,20 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-async function getData(url) {
-  const res = await fetch(url);
-
-  if (!res.ok) {
-    const err = new Error(
-      `API returned status code ${res.status}: Please check the food name well.`
-    );
-    err.status = res.status;
-    throw err;
-  }
-
-  return res.json();
-}
+const INGREDIENTS_URL = "http://localhost:5000/api/ingredients"
+const MACROS_URL = "http://localhost:5000/api/macros"
 
 export default async function Page(props) {
   const searchParams = await props.searchParams;
   const { fClass, size } = searchParams;
 
-  let macros, ingredients;
+  let macros, ingredients;  // Do not delete. Used during rendering
   try {
     if (fClass) {
       const params = new URLSearchParams({ ...searchParams }).toString();
-      const ingredientsUrl =
-        "http://localhost:5000/api/ingredients/" + "?" + params;
-      const macrosUrl = "http://localhost:5000/api/macros/" + "?" + params;
       [macros, { ingredients }] = await Promise.all([
-        getData(macrosUrl),
-        getData(ingredientsUrl),
+        getData(MACROS_URL + "?" + params),
+        getData(INGREDIENTS_URL + "?" + params),
       ]);
     }
   } catch (err) {
@@ -47,20 +33,6 @@ export default async function Page(props) {
     }
     throw err;
   }
-  // const searchParams = await props.searchParams;
-  // const urlSearchParams = new URLSearchParams(searchParams);
-  // const macrosRes = await fetch(
-  //   "http://localhost:5000/api/macros" + "?" + urlSearchParams.toString()
-  // );
-  // const ingredientRes = await fetch(
-  //   "http://localhost:5000/api/ingredients" + "?" + urlSearchParams.toString()
-  // );
-  // const [macros, { ingredients }] = await Promise.all([
-  //   macrosRes.json(),
-  //   ingredientRes.json(),
-  // ]);
-
-  console.log("from page", macros);
 
   return (
     <div className="bg-[url(/bg-img.png)] bg-[#f4fcfc]">
@@ -103,7 +75,6 @@ export default async function Page(props) {
               </p>
             </article>
             <article>
-              {/* <h1 className=" leading-10">Ingredients</h1> */}
               <Accordion type="single" collapsible>
                 <AccordionItem value="item-1">
                   <AccordionTrigger className={"text-md"}>
@@ -137,18 +108,6 @@ export default async function Page(props) {
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
-              {/* {ingredients ? (
-                <ol className="list-decimal list-inside">
-                  {ingredients.map((ingredient, i) => (
-                    <li key={i}>{ingredient}</li>
-                  ))}
-                </ol>
-              ) : (
-                <span className="text-red-500">
-                  No food found. Upload an image, and <br /> Select a food from
-                  the list that appears.
-                </span>
-              )} */}
             </article>
           </section>
         ) : (
@@ -172,4 +131,18 @@ export default async function Page(props) {
       </main>
     </div>
   );
+}
+
+async function getData(url) {
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    const err = new Error(
+      `API returned status code ${res.status}: Please check the food name well.`
+    );
+    err.status = res.status;
+    throw err;
+  }
+
+  return res.json();
 }
