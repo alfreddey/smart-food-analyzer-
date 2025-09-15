@@ -66,67 +66,71 @@ pnpm dev
 
 ```
 
+---
 
-Usage
+## Usage
 
-Open the web app in your browser.
+- Open the web app in your browser.
 
-Upload a JPEG/PNG food image.
+- Upload a JPEG/PNG food image.
 
-Select the predicted food class (editable).
+- Select the predicted food class (editable).
 
-Click “Get Nutritional Facts”.
+- Click “Get Nutritional Facts”.
 
-View calories, macronutrients (donut chart), and ingredients instantly.
+- View calories, macronutrients (donut chart), and ingredients instantly.
 
+---
 
- Testing
+## Testing
 
-Unit Tests – JestJS for React components.
+- Unit Tests – JestJS for React components.
 
-System Tests – Integration of UI and API.
+- System Tests – Integration of UI and API.
 
-API Tests – Postman for endpoint validation.
+- API Tests – Postman for endpoint validation.
 
-Responsiveness – Tested across devices.
+- Responsiveness – Tested across devices.
 
 Run tests:
 ```bash
 pnpm test
 ```
 
+---
 
+## 📊 Model Training
 
-📊 Model Training
+- **Dataset**: Food-101
 
-Dataset: Food-101
+- **Preprocessing**: Resize (224x224), normalization, augmentation
 
-Preprocessing: Resize (224x224), normalization, augmentation
+- **Architecture**: CNN with transfer learning (MobileNet, Xception)
 
-Architecture: CNN with transfer learning (MobileNet, Xception)
+- **Optimizer**: Adam (lr=1e-5 tuned for stability)
 
-Optimizer: Adam (lr=1e-5 tuned for stability)
+- **Target Performance**: Accuracy ≥ 80%, Loss ≤ 0.6
 
-Target Performance: Accuracy ≥ 80%, Loss ≤ 0.6
+---
 
-Novel Contributions
+## Novel Contributions
 
-Domain-specific CNN optimized for food recognition.
+- Domain-specific CNN optimized for food recognition.
 
-Seamless integration of deep learning with real-time web app.
+- Seamless integration of deep learning with real-time web app.
 
-Visual macronutrient breakdown for improved usability.
+- Visual macronutrient breakdown for improved usability.
 
-Open, modular design for easy future extensions.
+- Open, modular design for easy future extensions.
 
+---
 
+## Future Work
 
-Future Work
+- Multi-label classification for mixed meals.
 
-Multi-label classification for mixed meals.
+- Expand dataset to include culturally diverse foods.
 
-Expand dataset to include culturally diverse foods.
+- Explore transfer learning with larger models (EfficientNet, ResNet).
 
-Explore transfer learning with larger models (EfficientNet, ResNet).
-
-Mobile app integration for wider accessibility.
+- Mobile app integration for wider accessibility.
